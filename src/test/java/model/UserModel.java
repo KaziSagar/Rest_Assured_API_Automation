@@ -7,6 +7,4 @@ public class UserModel {
         this.email=email;
         this.password=password;
     }
-
-    
 }

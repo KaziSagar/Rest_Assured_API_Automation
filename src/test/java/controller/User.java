@@ -4,16 +4,13 @@ import Setup.Setup;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import model.AgentModel;
+import model.AgentCustomerModel;
+import model.TransactionModel;
 import model.UserModel;
 import org.apache.commons.configuration.ConfigurationException;
 import utils.Utils;
 
-import javax.crypto.SecretKey;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Properties;
 
 import static io.restassured.RestAssured.given;
 
@@ -22,6 +19,7 @@ public class User extends Setup {
         initConfig();
     }
     private String message;
+    private String agentNumber;
 
     public String getMessage() {
         return message;
@@ -67,40 +65,62 @@ public class User extends Setup {
     }
 
 
-
-
-
-
-
-
-    public void callingAgentCreationAPI(String name, String email, String password, String phone_number, String nid, String role) throws ConfigurationException, IOException {
+    public void callingAgentCustomerCreationAPI(String name, String email, String password, String phone_number, String nid, String role) throws ConfigurationException, IOException {
         RestAssured.baseURI = prop.getProperty("BASE_URL");
-        AgentModel agentModel = new AgentModel(name, email, password, phone_number, nid, role);
+        AgentCustomerModel agentCustomerModel = new AgentCustomerModel(name, email, password, phone_number, nid, role);
 
         Response res =
                 given()
                         .contentType("application/json")
                         .headers("Authorization", prop.getProperty("TOKEN"), "X-AUTH-SECRET-KEY", prop.getProperty("secretKey"))
-                        .body(agentModel)
+                        .body(agentCustomerModel)
                 .when()
                         .post("/user/create")
                 .then()
                         .assertThat().statusCode(201).extract().response();
 
         JsonPath jsonpath = res.jsonPath();
-        String token = jsonpath.get("token");
         String message=jsonpath.get("message");
         setMessage(message);
-        //Utils.setEnvVariable("TOKEN", token);
-
     }
 
+    public void callingCustomerUpdateAPI(String name, String email, String password, String phone_number, String nid, String role) throws ConfigurationException, IOException {
+        RestAssured.baseURI = prop.getProperty("BASE_URL");
+        AgentCustomerModel agentCustomerModel = new AgentCustomerModel(name, email, password, phone_number, nid, role);
 
+        Response res =
+                given()
+                        .contentType("application/json")
+                        .headers("Authorization", prop.getProperty("TOKEN"), "X-AUTH-SECRET-KEY", prop.getProperty("secretKey"))
+                        .body(agentCustomerModel)
+                        .when()
+                        .put("/user/update/102")
+                        .then()
+                        .assertThat().statusCode(200).extract().response();
 
+        JsonPath jsonpath = res.jsonPath();
+        String message=jsonpath.get("message");
+        setMessage(message);
+    }
 
+    public void callingDepositToAgentAPI() throws ConfigurationException, IOException {
+        RestAssured.baseURI = prop.getProperty("BASE_URL");
 
+        TransactionModel transactionModel = new TransactionModel();
 
+        Response res =
+                given()
+                        .contentType("application/json")
+                        .headers("Authorization", prop.getProperty("TOKEN"), "X-AUTH-SECRET-KEY", prop.getProperty("secretKey"))
+                        .body(transactionModel)
+                        .when()
+                        .post("/transaction/deposit")
+                        .then()
+                        .assertThat().statusCode(201).extract().response();
 
-
+        JsonPath jsonpath = res.jsonPath();
+        String message=jsonpath.get("message");
+        setMessage(message);
+    }
 
 }

@@ -1,6 +1,6 @@
 package model;
 
-public class AgentModel {
+public class AgentCustomerModel {
     public String name;
     public String email;
     public String password;
@@ -9,7 +9,7 @@ public class AgentModel {
     public String role;
 
 
-    public AgentModel(String name, String email, String password, String phone_number, String nid, String role){
+    public AgentCustomerModel(String name, String email, String password, String phone_number, String nid, String role){
         this.name=name;
         this.email = email;
         this.password = password;
