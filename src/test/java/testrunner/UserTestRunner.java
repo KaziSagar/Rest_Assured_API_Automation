@@ -75,8 +75,69 @@ public class UserTestRunner {
         user.callingDepositToAgentAPI();
 
         String messageExpected= "Deposit successful";
-        String messageActual = user.getMessage();
+        Assert.assertEquals(user.getMessage(),messageExpected);
 
-        Assert.assertTrue(messageActual.contains(messageExpected));
+        //String messageActual = user.getMessage();
+        //Assert.assertTrue(messageActual.contains(messageExpected));
     }
+    @Test
+    public void depositToCustomer() throws IOException, ConfigurationException {
+        User user = new User();
+        user.callingDepositToCustomerAPI();
+
+        String messageExpected= "Deposit successful";
+        Assert.assertEquals(user.getMessage(),messageExpected);
+
+        //String messageActual = user.getMessage();
+        //Assert.assertTrue(messageActual.contains(messageExpected));
+    }
+
+    @Test
+    public void checkAgentBalance() throws IOException, ConfigurationException {
+        User user = new User();
+        user.callingCheckAgentBalanceAPI();
+
+        String messageExpected= "User balance";
+        Assert.assertEquals(user.getMessage(),messageExpected);
+
+        //String messageActual = user.getMessage();
+        //Assert.assertTrue(messageActual.contains(messageExpected));
+    }
+
+    @Test
+    public void checkCustomerBalance() throws IOException, ConfigurationException {
+        User user = new User();
+        user.callingCheckCustomerBalanceAPI();
+
+        String messageExpected= "User balance";
+        Assert.assertEquals(user.getMessage(),messageExpected);
+
+        //String messageActual = user.getMessage();
+        //Assert.assertTrue(messageActual.contains(messageExpected));
+    }
+
+    @Test
+    public void customerWithdraw() throws IOException, ConfigurationException {
+        User user = new User();
+        user.callingCustomerWithdrawAPI();
+
+        String messageExpected= "Withdraw successful";
+        Assert.assertEquals(user.getMessage(),messageExpected);
+
+        //String messageActual = user.getMessage();
+        //Assert.assertTrue(messageActual.contains(messageExpected));
+    }
+
+    @Test
+    public void checkCustomerBalanceAfterCashOut() throws IOException, ConfigurationException {
+        User user = new User();
+        user.callingCheckCustomerBalanceAPI();
+
+        String messageExpected= "User balance";
+        Assert.assertEquals(user.getMessage(),messageExpected);
+
+        //String messageActual = user.getMessage();
+        //Assert.assertTrue(messageActual.contains(messageExpected));
+    }
+
 }

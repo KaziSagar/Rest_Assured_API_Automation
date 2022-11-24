@@ -5,13 +5,13 @@ import controller.User;
 
 import java.io.IOException;
 
-public class TransactionModel extends Setup {
+public class ToAgentTransactionModel extends Setup {
 
     public String from_account;
     public String to_account;
     public int amount;
 
-    public TransactionModel() throws IOException {
+    public ToAgentTransactionModel() throws IOException {
         initConfig();
         User user = new User();
 

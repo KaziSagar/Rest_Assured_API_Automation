@@ -4,9 +4,7 @@ import Setup.Setup;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import model.AgentCustomerModel;
-import model.TransactionModel;
-import model.UserModel;
+import model.*;
 import org.apache.commons.configuration.ConfigurationException;
 import utils.Utils;
 
@@ -106,13 +104,13 @@ public class User extends Setup {
     public void callingDepositToAgentAPI() throws ConfigurationException, IOException {
         RestAssured.baseURI = prop.getProperty("BASE_URL");
 
-        TransactionModel transactionModel = new TransactionModel();
+        ToAgentTransactionModel toAgentTransactionModel = new ToAgentTransactionModel();
 
         Response res =
                 given()
                         .contentType("application/json")
                         .headers("Authorization", prop.getProperty("TOKEN"), "X-AUTH-SECRET-KEY", prop.getProperty("secretKey"))
-                        .body(transactionModel)
+                        .body(toAgentTransactionModel)
                         .when()
                         .post("/transaction/deposit")
                         .then()
@@ -123,4 +121,87 @@ public class User extends Setup {
         setMessage(message);
     }
 
+    public void callingDepositToCustomerAPI() throws ConfigurationException, IOException {
+        RestAssured.baseURI = prop.getProperty("BASE_URL");
+
+        ToCustomerTransactionModel toCustomerTransactionModel = new ToCustomerTransactionModel();
+
+        Response res =
+                given()
+                        .contentType("application/json")
+                        .headers("Authorization", prop.getProperty("TOKEN"), "X-AUTH-SECRET-KEY", prop.getProperty("secretKey"))
+                        .body(toCustomerTransactionModel)
+                        .when()
+                        .post("/transaction/deposit")
+                        .then()
+                        .assertThat().statusCode(201).extract().response();
+
+        JsonPath jsonpath = res.jsonPath();
+        String message=jsonpath.get("message");
+        setMessage(message);
+    }
+
+    public void callingCheckAgentBalanceAPI() throws ConfigurationException, IOException {
+        RestAssured.baseURI = prop.getProperty("BASE_URL");
+        String agent_phone_number = prop.getProperty("agent_phone_number");
+
+        Response res =
+                given()
+                        .contentType("application/json")
+                        .headers("Authorization", prop.getProperty("TOKEN"), "X-AUTH-SECRET-KEY", prop.getProperty("secretKey"))
+                        .when()
+                        .get("/transaction/balance/" + agent_phone_number)
+                        .then()
+                        .assertThat().statusCode(200).extract().response();
+
+        JsonPath jsonpath = res.jsonPath();
+        String message=jsonpath.get("message");
+        setMessage(message);
+    }
+
+    public void callingCheckCustomerBalanceAPI() throws ConfigurationException, IOException {
+        RestAssured.baseURI = prop.getProperty("BASE_URL");
+        String customer_phone_number = prop.getProperty("customer_phone_number");
+
+        Response res =
+                given()
+                        .contentType("application/json")
+                        .headers("Authorization", prop.getProperty("TOKEN"), "X-AUTH-SECRET-KEY", prop.getProperty("secretKey"))
+                        .when()
+                        .get("/transaction/balance/" + customer_phone_number)
+                        .then()
+                        .assertThat().statusCode(200).extract().response();
+
+        JsonPath jsonpath = res.jsonPath();
+        String message=jsonpath.get("message");
+        setMessage(message);
+    }
+
+
+
+
+
+
+
+
+
+    public void callingCustomerWithdrawAPI() throws ConfigurationException, IOException {
+        RestAssured.baseURI = prop.getProperty("BASE_URL");
+
+        CustomerWithdrawModel customerWithdrawModel = new CustomerWithdrawModel();
+
+        Response res =
+                given()
+                        .contentType("application/json")
+                        .headers("Authorization", prop.getProperty("TOKEN"), "X-AUTH-SECRET-KEY", prop.getProperty("secretKey"))
+                        .body(customerWithdrawModel)
+                        .when()
+                        .post("/transaction/withdraw")
+                        .then()
+                        .assertThat().statusCode(201).extract().response();
+
+        JsonPath jsonpath = res.jsonPath();
+        String message=jsonpath.get("message");
+        setMessage(message);
+    }
 }
