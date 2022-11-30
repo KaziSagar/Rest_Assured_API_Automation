@@ -4,7 +4,7 @@
 
 https://api.postman.com/collections/1844288-143eb923-423f-4c91-a198-fe6e56d20e35?access_key=PMAT-01GJ3CC22Q0066PJWP3T0XHQ8G
 
-#Tools used
+#T ools used
 
 1. Selenium
 2. JUnit
